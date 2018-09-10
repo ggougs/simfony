@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<ul>
+    <li>{{oneUser.name}}</li>
+     <li>{{oneUser.lastname}}</li>
+      <li>{{oneUser.email}}</li>
+       <li>{{ oneUser.datecreate|date('Y-m-d')}}</li>
+       <li>{{ oneUser.datelastlogin|date('Y-m-d')}}</li>
+
+</ul>
+
+
+
+
+{% endblock %}
