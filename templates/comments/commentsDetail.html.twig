@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<table class="table table-hover">
+  <thead>
+  <tr>
+       <th>Titre Article </th>
+       <th>Contenu Commentaire</th>
+       <th>date de creation du commentaire </th>
+       <th>nom de l auteur du commentaire</th>
+    
+   </tr>
+{% for comment in oneComment %}
+      
+<tr>
+       <td> {{comment.articles.title}}</td>
+       <td> {{comment.content}}</td>
+      
+       <td> {{comment.dateCreate|date('Y-m-d')}}</td>
+       <td> {{comment.users.name}}</td>
+
+</tr>
+
+{% endfor %}
+</table>
+
+{% endblock %}

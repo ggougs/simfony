@@ -2,9 +2,16 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+
+
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticlesRepository")
@@ -21,7 +28,7 @@ class Articles
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -29,30 +36,39 @@ class Articles
     private $content;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
      */
-    private $dateEnvoi;
+    private $dateCreation;
 
-   
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="Articles")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $userId;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comments", mappedBy="articles")
+     */
+    private $comments;
 
     public function __construct()
     {
-        $this->idUser = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
     }
-
-    public function getName(): ?string
+ 
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -69,43 +85,67 @@ class Articles
         return $this;
     }
 
-    public function getDateEnvoi(): ?\DateTimeInterface
+    public function getDateCreation(): ?\DateTimeInterface
     {
-        return $this->dateEnvoi;
+        return $this->dateCreation;
     }
 
-    public function setDateEnvoi(?\DateTimeInterface $dateEnvoi): self
+    public function setDateCreation(\DateTimeInterface $dateCreation): self
     {
-        $this->dateEnvoi = $dateEnvoi;
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    public function getUserId(): ?Users
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(?Users $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    public function getUserIdId(): ?int
+    {
+        return $this->user_id_id;
+    }
+
+    public function setUserIdId(int $user_id_id): self
+    {
+        $this->user_id_id = $user_id_id;
 
         return $this;
     }
 
     /**
-     * @return Collection|users[]
+     * @return Collection|Comments[]
      */
-    public function getIdUser(): Collection
+    public function getComments(): Collection
     {
-        return $this->idUser;
+        return $this->comments;
     }
 
-    public function addIdUser(users $idUser): self
+    public function addComment(Comments $comment): self
     {
-        if (!$this->idUser->contains($idUser)) {
-            $this->idUser[] = $idUser;
-            $idUser->setUser($this);
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setArticles($this);
         }
 
         return $this;
     }
 
-    public function removeIdUser(users $idUser): self
+    public function removeComment(Comments $comment): self
     {
-        if ($this->idUser->contains($idUser)) {
-            $this->idUser->removeElement($idUser);
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
             // set the owning side to null (unless already changed)
-            if ($idUser->getUser() === $this) {
-                $idUser->setUser(null);
+            if ($comment->getArticles() === $this) {
+                $comment->setArticles(null);
             }
         }
 

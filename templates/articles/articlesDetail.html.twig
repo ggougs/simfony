@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<ul>
+    <li>{{oneArticle.title}}</li>
+     <li>{{oneArticle.content}}</li>
+       <li>{{ oneArticle.dateCreation|date('Y-m-d')}}</li>
+       <li>{{ oneArticle.userId.name}}</li>
+
+</ul>
+
+<table class="table table-hover">
+  <thead>
+  <tr>
+       
+       <th>Contenu Commentaire</th>
+       <th>date de creation du commentaire </th>
+       <th>nom de l auteur du commentaire</th>
+    
+   </tr>
+{% for comment in oneArticle.comments %}
+      
+<tr>
+     
+       <td> {{comment.content}}</td>
+       <td> {{comment.dateCreate|date('Y-m-d')}}</td>
+       <td> {{comment.users.name}}</td>
+
+</tr>
+
+{% endfor %}
+
+<h1> AJOUT Comments </h1>
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{{ form_start(form) }}
+
+{{ form_widget(form) }}
+{{ form_end(form) }}
+
+
+
+
+{% endblock %}

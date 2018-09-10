@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h1> list article</h1>
+   
+    <table class="table table-hover">
+  <thead>
+  <tr>
+       <th>Titre</th>
+       <th>Contenu</th>
+       <th>date de creation</th>
+       <th>nom de l auteur</th>
+       <th>Afficher un article</th>
+       <th>modification article</th>
+        <th>suppression article</th>
+      
+   </tr>
+   {% for article in allarticles %}
+     
+   <tr>
+       <td>{{ article.title }}</td>
+       <td>{{ article.content }}</td>
+       <td>{{ article.dateCreation|date('Y-m-d')}}</td>
+       <td>{{ article.userId.name }}</td>
+       <td><a href= {{ path('articlesdetails', {'id':article.id}) }}>afficher detail article</a></td>
+       <td><a href= {{ path('updateArticle', {'id':article.id}) }}>Modifier article</a></td>
+       <td><a href= {{ path('deleteArticle', {'id':article.id}) }}>supprimer un article</a></td>
+       
+   </tr>
+ {% endfor %}
+ 
+</table>
+
+    
+   
+  </tbody>
+
+{% endblock %}
