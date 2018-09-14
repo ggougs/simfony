@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Users;
 use App\Entity\Articles;
 use App\Entity\Comments;
+use App\Entity\Categories;
 
 class User extends Fixture
 {
@@ -18,6 +19,7 @@ class User extends Fixture
             $users = new Users();
             $users->setLastName("Gregory")
                   ->setName("Garabedian")
+                  ->setuserName("admin")
                   ->setEmail("gg@gmail.Com")
                   ->setPassword('ggougs')
                   ->setDateCreate(new \DateTime() )
@@ -29,15 +31,24 @@ class User extends Fixture
                       ->setContent("le ciel est bleu")
                       ->setDateCreation(new \DateTime() )
                      -> setUserId($users);
-                    
+                     
+                $this->setReference('art-article', $articles);
                 $manager->persist($articles);
                     for ($k = 0 ; $k < 1 ; $k++) {
+                        $categories = new Categories();
                         $comments = new Comments();
+                        $categories ->setName("Actualité")
+                                    ->addArticle($this->getReference('art-article'));
                         $comments ->setContent("super article")
                                   ->setDateCreate(new \DateTime() )
                                   ->setUsers($users)
                                   ->setArticles($articles);
-                                  $manager->persist($comments);
+                                   $manager->persist($comments);
+                                   $manager->persist($categories);
+                      
+
+                       
+                                
             }
             
 

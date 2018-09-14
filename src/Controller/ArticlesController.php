@@ -8,6 +8,8 @@ use App\Repository\ArticlesRepository;
 use App\Entity\Articles;
 use App\Entity\Comments;
 use App\Entity\Users;
+use App\Entity\Categories;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -17,12 +19,18 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+/**
+ * @Route("/{_locale}")
+*     requirements={
+*         "_locale": '%app.locales%',
+*     }
+*/
 
 
 class ArticlesController extends AbstractController
 {
     /**
-     * @Route("/articles", name="articles")
+     * @Route("/user/articles", name="articles")
      */
     public function index()
     {
@@ -31,10 +39,10 @@ class ArticlesController extends AbstractController
         ]);
     }
     /**
-     * @Route("/articles/{id}", name="articlesdetails",requirements={"id"="\d+"}))
+     * @Route("/user/articles/{id}", name="articlesdetails",requirements={"id"="\d+"}))
      
      */
-    public function listArticle(Comments $comment=null,ArticlesRepository $repo,$id,Request $request, ObjectManager $manager)
+    public function listArticle(Comments $comment=null,ArticlesRepository $repo,$id,Request $request, ObjectManager $manager, TranslatorInterface $translator)
     {
 
          $oneArticle = $repo->findOneById($id);
@@ -46,20 +54,21 @@ class ArticlesController extends AbstractController
      
              $form = $this->createFormBuilder($comment)
                  ->add('content', TextareaType::class)
-                 ->add('users', EntityType::class, array(
-                    
-                     'class' => Users::class,
-                     'choice_label' => 'name'
-                     ))
-
-                     
-                 ->add('save', SubmitType::class, array('label' => "Insere le l'article VAS Y "))
+                //  ->add('users', EntityType::class, array(
+            
+                //     'class' => Users::class,
+                //     'choice_label' => 'name'
+                //     ))
+                ->add('save', SubmitType::class, array('label' => "Insere le  VAS Y "))
                  ->getForm();
      
                  $form->handleRequest($request);
      
                  if ($form->isSubmitted() && $form->isValid())  {
+                    $user = $this ->get('security.token_storage') ->getToken()->getUser('id');
+                    $comment->setUsers($user);
                     $comment->setArticles($oneArticle); 
+                    
                      $comment->setDateCreate( new \DateTime() ); 
 
                          $manager->persist( $comment );
@@ -74,7 +83,7 @@ class ArticlesController extends AbstractController
             'form' => $form->createView()]);
     }
     /**
-     * @Route("/articles/list", name="articleslist")
+     * @Route("/user/articles/list", name="articleslist")
      */
     public function list (ArticlesRepository $repo)
 
@@ -86,8 +95,8 @@ class ArticlesController extends AbstractController
             'allarticles' => $allArticles]);
     }
     /**
-     * @Route("/articles/ajout", name="ajoutArticle")
-     * @Route("/articles/edit/{id}", name="updateArticle",requirements={"id"="\d+"})
+     * @Route("/author/articles/ajout", name="ajoutArticle")
+     * @Route("/author/articles/edit/{id}", name="updateArticle",requirements={"id"="\d+"})
      */
 
     public function addArticles(Articles $article=null,Request $request, ObjectManager $manager )
@@ -101,18 +110,26 @@ class ArticlesController extends AbstractController
         $form = $this->createFormBuilder($article)
             ->add('title', TextType::class)
             ->add('content', TextareaType::class)
-            ->add('userId', EntityType::class, array(
-                // looks for choices from this entity
-                'class' => Users::class,
-                'choice_label' => 'name'
+            // ->add('userId', EntityType::class, array(
+            
+            //     'class' => Users::class,
+            //     'choice_label' => 'name'
+            //     ))
+                ->add('categories', EntityType::class, array(
+                    'class' => Categories::class,
+                    'choice_label' => 'name',
+                    'multiple' => true,
+                    'expanded' => true
                 ))
+                     
             ->add('save', SubmitType::class, array('label' => "Insere le l'article VAS Y "))
             ->getForm();
 
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid())  {
-             
+                $user = $this ->get('security.token_storage') ->getToken()->getUser('id');
+                $article->setUserId($user);
                 $article->setDateCreation( new \DateTime() ); 
                     $manager->persist( $article );
                     $manager->flush();
@@ -130,7 +147,7 @@ class ArticlesController extends AbstractController
 
     }
     /**
-     * @Route("/article/delete/{id}", name="deleteArticle",requirements={"id"="\d+"})
+     * @Route("/admin/article/delete/{id}", name="deleteArticle",requirements={"id"="\d+"})
    
      */
     public function deleteArticle(Articles $article, ObjectManager $manager){

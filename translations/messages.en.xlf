@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="test">
+                <source>Liste des Utilisateurs</source>
+                <target>List of users</target>
+            </trans-unit>
+            
+             <trans-unit id="test2">
+                <source>liste des articles</source>
+                <target>list article</target>
+            </trans-unit>
+            <trans-unit id="test3">
+                <source>Titre</source>
+                <target>Title</target>
+            </trans-unit>
+            <trans-unit id="test4">
+                <source>Contenu </source>
+                <target>Content</target>
+            </trans-unit>
+            <trans-unit id="test5">
+                <source>date de creation</source>
+                <target>creation date</target>
+            </trans-unit>
+            <trans-unit id="test6">
+                <source>nom de l auteur</source>
+                <target>Author Name</target>
+            </trans-unit>
+            <trans-unit id="test7">
+                <source>Afficher un article</source>
+                <target>Display Article</target>
+            </trans-unit>
+            <trans-unit id="test8">
+                <source>modification article</source>
+                <target>Article Modification</target>
+            </trans-unit>
+            <trans-unit id="test9">
+                <source>suppression article</source>
+                <target>Delete Article</target>
+            </trans-unit>
+             <trans-unit id="test10">
+                <source>Bienvenue</source>
+                <target>Welcome</target>
+            </trans-unit>
+            <trans-unit id="test10">
+                <source>Utilisateurs</source>
+                <target>Users</target>
+            </trans-unit>
+             <trans-unit id="test10">
+                <source>Ajouter utilisateur</source>
+                <target>add Users</target>
+            </trans-unit>
+             <trans-unit id="test10">
+                <source>Ajouter articles</source>
+                <target>add Articles</target>
+            </trans-unit>
+           </target>
+           
+
+
+
+
+
+        </body>
+    </file>
+</xliff>

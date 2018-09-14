@@ -3,11 +3,14 @@
 {% block body %}
 
 <ul>
+{% trans_default_domain 'app' %}
+
     <li>{{oneUser.name}}</li>
      <li>{{oneUser.lastname}}</li>
       <li>{{oneUser.email}}</li>
        <li>{{ oneUser.datecreate|date('Y-m-d')}}</li>
        <li>{{ oneUser.datelastlogin|date('Y-m-d')}}</li>
+       <li><img src="{{asset('uploads/avatar/'~oneUser.avatar )| imagine_filter('my_thumb')}}"></li>
 
 </ul>
 

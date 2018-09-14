@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class CommentsController extends AbstractController
 {
     /**
-     * @Route("/comments", name="comments")
+     * @Route("/user/comments", name="comments")
      */
     public function index()
     {
@@ -23,7 +23,7 @@ class CommentsController extends AbstractController
         ]);
     }
     /**
-     * @Route("/comments/{id}", name="commentsDetails",requirements={"id"="\d+"}))
+     * @Route("/user/comments/{id}", name="commentsDetails",requirements={"id"="\d+"}))
      
      */
     public function listComments(CommentsRepository $repo,$id)

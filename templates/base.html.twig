@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}{% trans %}<Bienvenue!{% endtrans %}{% endblock %}</title>
         <link rel='stylesheet' href='https://bootswatch.com/4/journal/bootstrap.min.css'>
         {% block stylesheets %}{% endblock %}
     </head>
@@ -16,28 +16,37 @@
   <div class="collapse navbar-collapse" id="navbarColor02">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href= {{ path('home') }}>Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href= {{ path('home') }}>{% trans %}Accueil{% endtrans %} <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href= {{ path('userslist') }} >Users</a>
+        <a class="nav-link" href= {{ path('userslist') }} >{% trans %}Utilisateurs{% endtrans %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href={{ path('ajoutUser') }}>Ajout Users</a>
+        <a class="nav-link" href={{ path('ajoutUser') }}>{% trans %}Ajouter utilisateur{% endtrans %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href={{ path('articleslist') }}>Articles</a>
+        <a class="nav-link" href={{ path('articleslist') }}>{% trans %}Articles{% endtrans %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href={{ path('ajoutArticle') }}>Ajout articles</a>
+        <a class="nav-link" href={{ path('ajoutArticle') }}>{% trans %}Ajouter articles{% endtrans %}</a>
       </li>
+       {% if app.user %}
+                    <li class="nav-item">
+                        <p class="nav-link">{% trans %}Bienvenue:{% endtrans %} {{ app.user.name }} </p>
+                    </li>
+                 {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ path('login') }}>Login</a>
+                    </li>
+                 {% endif %}
+                  {% if app.user %}
+                    <a class="nav-link" href= {{ logout_path('main') }}>LOGOUT</a>
+       {% endif %}
        
   
       
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
-      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    
   </div>
 </nav>
     <div class="container">

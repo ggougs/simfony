@@ -3,18 +3,20 @@
 namespace App\Entity;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+    
 
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
+ * @UniqueEntity("email")
  */
-class Users implements UserInterface
+class Users implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -57,12 +59,7 @@ class Users implements UserInterface
     private $email;
 
     /**
-     * @Assert\Length(
-     *      min = 4,
-     *      max = 50,
-     *      minMessage = "Your password must be at least {{ limit }} characters long",
-     *      maxMessage = "Your password cannot be longer than {{ limit }} characters"
-     * )
+    
      * @Assert\NotBlank()
      * @Assert\NotIdenticalTo("0000")
      * @ORM\Column(type="string", length=255)
@@ -90,13 +87,34 @@ class Users implements UserInterface
      */
     private $Comments;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $userName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    
+    private $roles;
+    
+
+     /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload the avatar brochure as a PNG file.")
+     * @Assert\File(mimeTypes={ "image/png" ,"image/jpg","image/jpeg" })
+     */
+    private $avatar;
+    
+
+
+    
     public function __construct()
     {
         $this->Articles = new ArrayCollection();
         $this->Comments = new ArrayCollection();
     }
-
-
 
     public function getId(): ?int
     {
@@ -175,14 +193,9 @@ class Users implements UserInterface
         return $this;
     }
 
-    public function getRoles()
-    {
-        return false;
-    }
-
     public function getSalt()
     {
-        return 'gfdsg4df65g465e4654';
+        return '';
     }
 
     public function getUsername()
@@ -266,4 +279,73 @@ class Users implements UserInterface
 
         return $this;
     }
+   
+    /** @see \Serializable::serialize() */
+    public function serialize() {
+        return serialize([
+         $this->id,
+         $this->name,
+         $this->userName,
+         $this->lastName,
+         $this->email,
+         $this->password
+    ]);}
+
+    
+    /** @see \Serializable::unserialize() */
+    public function unserialize($string) {
+        list(
+         $this->id,
+         $this->name,
+         $this->userName,
+         $this->LastName,
+         $this->email,
+         $this->password
+        ) = unserialize($string,['allowed_classes' =>false]);
+    }
+    
+
+    public function setUserName(string $userName): self
+    {
+        $this->userName = $userName;
+
+        return $this;
+    }
+    
+    
+
+
+    /**
+     * Set the value of roles
+     *
+     * @return  self
+     */ 
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of roles
+     */ 
+    public function getRoles()
+    {
+        return array($this->roles);
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+
 }

@@ -1,12 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<h1> CATEGORIE ARTICLE </h1>
+{% for categorie in oneArticle.categories %}
+      
+<tr>
+        
+       <td> 
+       
+       {{categorie.name}}</td>
 
+</tr>
+
+{% endfor %}
+<h1> DETAILS ARTICLE : </h1>
 <ul>
-    <li>{{oneArticle.title}}</li>
-     <li>{{oneArticle.content}}</li>
-       <li>{{ oneArticle.dateCreation|date('Y-m-d')}}</li>
-       <li>{{ oneArticle.userId.name}}</li>
+    <li><span>Titre: </span>{{oneArticle.title}}</li>
+     <li><span>Contenu: </span>{{oneArticle.content}}</li>
+       <li><span>date creation : </span>{{ oneArticle.dateCreation|date('Y-m-d')}}</li>
+       <li><span>auteur: </span>{{ oneArticle.userId.name}}</li>
 
 </ul>
 
@@ -31,7 +43,8 @@
 
 {% endfor %}
 
-<h1> AJOUT Comments </h1>
+
+<h1> AJOUT COMMENTAIRES </h1>
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 {{ form_start(form) }}
 
